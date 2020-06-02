@@ -278,6 +278,14 @@ func TestDecodeSessionState(t *testing.T) {
 			Cipher:  c,
 			Error:   true,
 		},
+		{
+			SessionState: sessions.SessionState{
+				Email: "user@domain.com",
+				User:  "YmFzZTY0LWVuY29kZWQtdXNlcgo=", // Base64 encoding of base64-encoded-user
+			},
+			Encoded: `{"Email":"user@domain.com","User":"YmFzZTY0LWVuY29kZWQtdXNlcgo="}`,
+			Cipher:  c,
+		},
 	}
 
 	for i, tc := range testCases {

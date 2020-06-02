@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+	"unicode/utf8"
 
 	"github.com/oauth2-proxy/oauth2-proxy/pkg/encryption"
 )
@@ -105,14 +106,14 @@ func DecodeSessionState(v string, c *encryption.Cipher) (*SessionState, error) {
 		// Backward compatibility with using unencrypted Email
 		if ss.Email != "" {
 			decryptedEmail, errEmail := c.Decrypt(ss.Email)
-			if errEmail == nil {
+			if errEmail == nil && utf8.ValidString(decryptedEmail) {
 				ss.Email = decryptedEmail
 			}
 		}
 		// Backward compatibility with using unencrypted User
 		if ss.User != "" {
 			decryptedUser, errUser := c.Decrypt(ss.User)
-			if errUser == nil {
+			if errUser == nil && utf8.ValidString(decryptedUser) {
 				ss.User = decryptedUser
 			}
 		}
