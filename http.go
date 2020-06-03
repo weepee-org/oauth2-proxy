@@ -172,7 +172,8 @@ func redirectToHTTPS(opts *options.Options, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		proto := r.Header.Get("X-Forwarded-Proto")
 		if opts.ForceHTTPS && (r.TLS == nil || (proto != "" && strings.ToLower(proto) != "https")) {
-			http.Redirect(w, r, opts.HTTPSAddress, http.StatusPermanentRedirect)
+			target := "https://" + r.Host + r.URL.Path
+			http.Redirect(w, r, target, http.StatusPermanentRedirect)
 		}
 
 		h.ServeHTTP(w, r)
