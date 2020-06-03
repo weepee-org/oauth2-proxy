@@ -170,8 +170,8 @@ func (ln tcpKeepAliveListener) Accept() (c net.Conn, err error) {
 
 func redirectToHTTPS(opts *options.Options, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		proto := r.Header.Get("X-Forwarded-Proto")
-		if opts.ForceHTTPS && (r.TLS == nil || (proto != "" && strings.ToLower(proto) != "https")) {
+		proto := r.Header.Get("x-forwarded-proto")
+		if opts.ForceHTTPS && (proto != "" && strings.ToLower(proto) != "https") {
 			target := "https://" + r.Host + r.URL.Path
 			http.Redirect(w, r, target, http.StatusPermanentRedirect)
 		}
